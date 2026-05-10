@@ -1,0 +1,36 @@
+services:
+  nominatim:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    tty: true
+    stdin_open: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NOMINATIM_DATABASE_DSN: "pgsql:host=db;port=5432;user=nominatim;password=nominatim;dbname=nominatim"
+      NOMINATIM_PGROONGA: "on"
+    volumes:
+      - ./data:/nominatim/data
+      - nominatim-project:/nominatim/project
+  db:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    environment:
+      POSTGRES_USER: nominatim
+      POSTGRES_PASSWORD: nominatim
+      POSTGRES_DB: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nominatim -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db:
+  nominatim-project:
