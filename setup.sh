@@ -32,3 +32,14 @@ docker compose exec db bash -c '
   datadir=$(psql -U nominatim -d nominatim --tuples-only --no-align --command "SHOW data_directory;")
   echo "pgroonga_index_size=$(du --total -h "$datadir/base/$oid"/pgrn* 2>/dev/null | tail -1 | cut -f1)"
 '
+
+docker compose exec -T db psql -U nominatim -d nominatim -c "
+   SELECT
+     pg_size_pretty(pg_total_relation_size('search_name')) AS search_name_total,
+     pg_size_pretty(pg_relation_size('search_name')) AS heap,
+     pg_size_pretty(sum(pg_column_size(all_names))) AS all_names_data
+   FROM search_name;"
+
+docker compose exec -T db psql -U nominatim -d nominatim -c "
+    SELECT indexrelname, pg_size_pretty(pg_relation_size(indexrelid))
+    FROM pg_stat_user_indexes WHERE relname='search_name';"
