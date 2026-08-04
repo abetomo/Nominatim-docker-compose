@@ -22,6 +22,7 @@ services:
       POSTGRES_USER: nominatim
       POSTGRES_PASSWORD: nominatim
       POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data
     volumes:
       - db:/var/lib/postgresql/data
     shm_size: 1g

@@ -1,4 +1,4 @@
-FROM postgres:17-bookworm
+FROM postgres:18-bookworm
 
 RUN apt update
 RUN apt install -y -V curl ca-certificates lsb-release wget
