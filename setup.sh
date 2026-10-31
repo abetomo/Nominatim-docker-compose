@@ -9,6 +9,9 @@ fi
 if [ ! -f data/kansai-latest.osm.pbf ]; then
   wget https://download.geofabrik.de/asia/japan/kansai-latest.osm.pbf -P data
 fi
+if [ ! -f data/hokkaido-latest.osm.pbf ]; then
+  wget https://download.geofabrik.de/asia/japan/hokkaido-latest.osm.pbf -P data
+fi
 
 docker compose down --volumes
 
