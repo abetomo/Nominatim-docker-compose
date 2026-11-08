@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: app.Dockerfile
+      args:
+        NOMINATIM_BRANCH: "${NOMINATIM_BRANCH:-pgroonga}"
     tty: true
     stdin_open: true
     depends_on:

@@ -25,10 +25,15 @@ if [ ! -f data/merged.osm.pbf ]; then
 fi
 time docker compose exec nominatim nominatim import --osm-file /nominatim/data/merged.osm.pbf
 
+docker compose exec db psql -U nominatim -d nominatim --command "SELECT count(*) FROM search_name;"
+
+if [ "${NOMINATIM_BRANCH:-pgroonga}" != "pgroonga" ]; then
+  exit 0
+fi
+
+### For PGroonga
 time docker compose exec -T nominatim cat /nominatim/src/contrib/pgroonga/setup.sql |
   docker compose exec -T db psql -U nominatim -d nominatim
-
-docker compose exec db psql -U nominatim -d nominatim --command "SELECT count(*) FROM search_name;"
 
 docker compose exec db bash -c '
   oid=$(psql -U nominatim -d nominatim --tuples-only --no-align --command "SELECT oid FROM pg_database WHERE datname=current_database();")

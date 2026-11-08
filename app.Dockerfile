@@ -17,7 +17,8 @@ RUN apt install -y -V \
   python3-venv \
   wget
 
-RUN git clone -b pgroonga https://github.com/abetomo/Nominatim.git /nominatim/src
+ARG NOMINATIM_BRANCH=pgroonga
+RUN git clone --branch "${NOMINATIM_BRANCH}" https://github.com/abetomo/Nominatim.git /nominatim/src
 
 RUN wget -O /nominatim/src/data/country_osm_grid.sql.gz \
   https://nominatim.org/data/country_grid.sql.gz
