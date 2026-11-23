@@ -15,7 +15,7 @@ fi
 
 docker compose down --volumes
 
-docker compose build --no-cache
+docker compose build --no-cache --pull
 docker compose up -d
 
 docker compose exec db psql -U nominatim -d postgres -c 'CREATE ROLE "www-data" LOGIN;'
